@@ -2,7 +2,7 @@ import express from "express";
 import { body, validationResult, ValidationChain } from "express-validator";
 import { RunnableValidationChains } from "express-validator/lib/middlewares/schema";
 import HTTP_STATUS from "~/constants/httpStatus";
-import { EntityError, ErrorWithStatus } from "~/models/erors";
+import { EntityError, ErrorWithStatus } from "~/models/errors";
 // import HTTP_STATUS from "~/constants/httpStatus";
 // import { EntityError, ErrorWithStatus } from "~/models/Errors";
 // can be reused by many routes

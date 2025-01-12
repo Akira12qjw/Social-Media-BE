@@ -18,8 +18,11 @@ import axios from "axios";
 //   sendVerifyRegisterEmail,
 // } from "~/utils/email";
 import { envConfig } from "~/constants/config";
-import { ErrorWithStatus } from "~/models/erors";
-import { sendForgotPasswordEmail } from "~/utils/email";
+import { ErrorWithStatus } from "~/models/errors";
+import {
+  sendForgotPasswordEmail,
+  sendVerifyRegisterEmail,
+} from "~/utils/email";
 
 class UsersService {
   private signAccessToken({
@@ -164,7 +167,7 @@ class UsersService {
     // 3. Client send request to server with email_verify_token
     // 4. Server verify email_verify_token
     // 5. Client receive access_token and refresh_token
-    // await sendVerifyRegisterEmail(payload.email, email_verify_token);
+    await sendVerifyRegisterEmail(payload.email, email_verify_token);
     return {
       access_token,
       refresh_token,
@@ -364,12 +367,12 @@ class UsersService {
       refresh_token,
     };
   }
-  async resendVerifyEmail(user_id: string) {
+  async resendVerifyEmail(user_id: string, email: string) {
     const email_verify_token = await this.signEmailVerifyToken({
       user_id,
       verify: UserVerifyStatus.Unverified,
     });
-    // await sendVerifyRegisterEmail(email, email_verify_token);
+    await sendVerifyRegisterEmail(email, email_verify_token);
 
     // Cập nhật lại giá trị email_verify_token trong document user
     await databaseService.users.updateOne(

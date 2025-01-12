@@ -6,6 +6,7 @@ import { USERS_MESSAGES } from "~/constants/messages";
 import mediasService from "~/services/medias.services";
 import { handleUploadImage } from "~/utils/files";
 import fs from "fs";
+import { sendFileFromS3 } from "~/utils/s3";
 
 console.log(path.resolve("uploads"));
 
@@ -72,34 +73,33 @@ export const serveImageController = async (
   });
 };
 
-export const serveM3u8Controller = async (
+export const serveM3u8Controller = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
-  return res.sendFile(
-    path.resolve(UPLOAD_VIDEO_DIR, id, "master.m3u8"),
-    (err) => {
-      if (err) {
-        res.status((err as any).status).send("Not Found");
-      }
-    }
-  );
+  sendFileFromS3(res, `videos-hls/${id}/master.m3u8`);
+  // return res.sendFile(path.resolve(UPLOAD_VIDEO_DIR, id, 'master.m3u8'), (err) => {
+  //   if (err) {
+  //     res.status((err as any).status).send('Not found')
+  //   }
+  // })
 };
 
-export const serveSegmentController = async (
+export const serveSegmentController = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const { id, v, segment } = req.params;
+  sendFileFromS3(res, `videos-hls/${id}/${v}/${segment}`);
 
-  return res.sendFile(path.resolve(UPLOAD_VIDEO_DIR, id, v, segment), (err) => {
-    if (err) {
-      res.status((err as any).status).send("Not Found");
-    }
-  });
+  // return res.sendFile(path.resolve(UPLOAD_VIDEO_DIR, id, v, segment), (err) => {
+  //   if (err) {
+  //     res.status((err as any).status).send('Not found')
+  //   }
+  // })
 };
 
 export const serveVideoStreamController = async (

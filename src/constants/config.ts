@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+config();
 import fs from "fs";
 import path from "path";
 const env = process.env.NODE_ENV;

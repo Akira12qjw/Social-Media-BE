@@ -3,7 +3,7 @@ import { checkSchema, ParamSchema } from "express-validator";
 import { JsonWebTokenError } from "jsonwebtoken";
 import HTTP_STATUS from "~/constants/httpStatus";
 import { USERS_MESSAGES } from "~/constants/messages";
-import { ErrorWithStatus } from "~/models/erors";
+import { ErrorWithStatus } from "~/models/errors";
 import RefreshToken from "~/models/schemas/RefreshToken.schema";
 // import { ErrorWithStatus } from "~/models/Errors";
 import databaseService from "~/services/database.services";
@@ -588,4 +588,24 @@ export const changePasswordValidator = validate(
     password: passwordSchema,
     confirm_password: confirmPasswordSchema,
   })
+);
+
+export const isUserLoggedInValidator = (
+  middleware: (req: Request, res: Response, next: NextFunction) => void
+) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (req.headers.authorization) {
+      return middleware(req, res, next);
+    }
+    next();
+  };
+};
+
+export const getConversationsValidator = validate(
+  checkSchema(
+    {
+      receiver_id: userIdSchema,
+    },
+    ["params"]
+  )
 );

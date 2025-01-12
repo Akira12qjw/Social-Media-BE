@@ -1,6 +1,6 @@
 import { TweetAudience, TweetType } from "~/constants/enums";
-import { Media } from "~/models/other";
 import { ParamsDictionary, Query } from "express-serve-static-core";
+import { Media } from "../other";
 
 export interface TweetRequestBody {
   type: TweetType;

@@ -5,6 +5,10 @@ import RefreshToken from "~/models/schemas/RefreshToken.schema";
 import Follower from "~/models/schemas/Follower.schema";
 import VideoStatus from "~/models/schemas/VideoStatus.schema";
 import Tweet from "~/models/schemas/Tweet.chema";
+import Hashtag from "~/models/schemas/Hashtag.chema";
+import Bookmark from "~/models/schemas/Bookmark.schema";
+import Like from "~/models/schemas/Like.schema";
+import Conversation from "~/models/schemas/Conversations.schema";
 config();
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@twitter.jeyiaxq.mongodb.net/?retryWrites=true&w=majority&appName=Twitter`;
@@ -62,7 +66,15 @@ class DatabaseService {
       this.followers.createIndex({ user_id: 1, follower_user_id: 1 });
     }
   }
-
+  async indexTweets() {
+    const exists = await this.tweets.indexExists(["content_text"]);
+    if (!exists) {
+      this.tweets.createIndex(
+        { content: "text" },
+        { default_language: "none" }
+      );
+    }
+  }
   get tweets(): Collection<Tweet> {
     return this.db.collection(process.env.DB_TWEETS_COLLECTION as string);
   }
@@ -83,6 +95,22 @@ class DatabaseService {
 
   get videoStatus(): Collection<VideoStatus> {
     return this.db.collection(process.env.DB_VIDEO_STATUS_COLLECTION as string);
+  }
+
+  get hashtags(): Collection<Hashtag> {
+    return this.db.collection(process.env.DB_HASHTAGS_COLLECTION as string);
+  }
+
+  get bookmarks(): Collection<Bookmark> {
+    return this.db.collection(process.env.DB_BOOKMARKS_COLLECTION as string);
+  }
+
+  get likes(): Collection<Like> {
+    return this.db.collection(process.env.DB_LIKES_COLLECTION as string);
+  }
+
+  get conversations(): Collection<Conversation> {
+    return this.db.collection(process.env.DB_CONVERSATION_COLLECTION as string);
   }
 }
 

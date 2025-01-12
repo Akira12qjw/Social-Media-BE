@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { TweetAudience, TweetType } from "~/constants/enums";
-import { Media } from "~/models/other";
+import { Media } from "../other";
 
 interface TweetConstructor {
   _id?: ObjectId;
@@ -28,10 +28,10 @@ export default class Tweet {
   hashtags: ObjectId[];
   mentions: ObjectId[];
   medias: Media[];
-  guest_views?: number;
-  user_views?: number;
-  created_at?: Date;
-  updated_at?: Date;
+  guest_views: number;
+  user_views: number;
+  created_at: Date;
+  updated_at: Date;
   constructor({
     _id,
     audience,

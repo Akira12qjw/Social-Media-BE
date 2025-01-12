@@ -1,10 +1,4 @@
 import { Request } from "express";
-import {
-  getFiles,
-  getNameFromFullName,
-  handleUploadImage,
-  handleUploadVideo,
-} from "~/utils/files";
 import sharp from "sharp";
 import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from "~/constants/dir";
 import path from "path";
@@ -14,11 +8,16 @@ import { EncodingStatus, MediaType } from "~/constants/enums";
 import { Media } from "~/models/other";
 import { encodeHLSWithMultipleVideoStreams } from "~/utils/video";
 import databaseService from "~/services/database.services";
-// import { uploadFileToS3 } from "~/utils/s3";
-
-// import { CompleteMultipartUploadCommandOutput } from "@aws-sdk/client-s3";
-import { rimrafSync } from "rimraf";
 import VideoStatus from "~/models/schemas/VideoStatus.schema";
+import { uploadFileToS3 } from "~/utils/s3";
+import { CompleteMultipartUploadCommandOutput } from "@aws-sdk/client-s3";
+import { rimrafSync } from "rimraf";
+import {
+  getFiles,
+  getNameFromFullName,
+  handleUploadImage,
+  handleUploadVideo,
+} from "~/utils/files";
 
 class Queue {
   items: string[];
@@ -62,19 +61,20 @@ class Queue {
         this.items.shift();
         await encodeHLSWithMultipleVideoStreams(videoPath);
         const files = getFiles(path.resolve(UPLOAD_VIDEO_DIR, idName));
-        // await Promise.all(
-        //   files.map((filepath) => {
-        //     // filepath: /Users/duthanhduoc/Documents/DuocEdu/NodeJs-Super/Twitter/uploads/videos/6vcpA2ujL7EuaD5gvaPvl/v0/fileSequence0.ts
-        //     const filename =
-        //       "videos-hls" +
-        //       filepath.replace(path.resolve(UPLOAD_VIDEO_DIR), "");
-        //     return uploadFileToS3({
-        //       filepath,
-        //       filename,
-        //       contentType: mime.getType(filepath) as string,
-        //     });
-        //   })
-        // );
+        const mime = await import("mime");
+        await Promise.all(
+          files.map((filepath) => {
+            // filepath: /Users/duthanhduoc/Documents/DuocEdu/NodeJs-Super/Twitter/uploads/videos/6vcpA2ujL7EuaD5gvaPvl/v0/fileSequence0.ts
+            const filename =
+              "videos-hls" +
+              filepath.replace(path.resolve(UPLOAD_VIDEO_DIR), "");
+            return uploadFileToS3({
+              filepath,
+              filename,
+              contentType: mime.default.getType(filepath) as string,
+            });
+          })
+        );
         rimrafSync(path.resolve(UPLOAD_VIDEO_DIR, idName));
         await databaseService.videoStatus.updateOne(
           {
@@ -124,58 +124,59 @@ const queue = new Queue();
 class MediasService {
   async uploadImage(req: Request) {
     const files = await handleUploadImage(req);
+    const mime = await import("mime");
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
         const newName = getNameFromFullName(file.newFilename);
         const newFullFilename = `${newName}.jpg`;
         const newPath = path.resolve(UPLOAD_IMAGE_DIR, newFullFilename);
         await sharp(file.filepath).jpeg().toFile(newPath);
-        // const s3Result = await uploadFileToS3({
-        //   filename: "images/" + newFullFilename,
-        //   filepath: newPath,
-        //   contentType: mime.getType(newPath) as string,
-        // });
+        const s3Result = await uploadFileToS3({
+          filename: "images/" + newFullFilename,
+          filepath: newPath,
+          contentType: mime.default.getType(newPath) as string,
+        });
         await Promise.all([
           fsPromise.unlink(file.filepath),
           fsPromise.unlink(newPath),
         ]);
-        // return {
-        // url: (s3Result as CompleteMultipartUploadCommandOutput)
-        //   .Location as string,
-        // type: MediaType.Image,
-        // };
         return {
-          url: isProduction
-            ? `${process.env.HOST}/static/image/${newFullFilename}`
-            : `http://localhost:${process.env.PORT}/static/image/${newFullFilename}`,
+          url: (s3Result as CompleteMultipartUploadCommandOutput)
+            .Location as string,
           type: MediaType.Image,
         };
+        // return {
+        //   url: isProduction
+        //     ? `${process.env.HOST}/static/image/${newFullFilename}`
+        //     : `http://localhost:${process.env.PORT}/static/image/${newFullFilename}`,
+        //   type: MediaType.Image
+        // }
       })
     );
     return result;
   }
   async uploadVideo(req: Request) {
     const files = await handleUploadVideo(req);
-
+    const mime = await import("mime");
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
-        // const s3Result = await uploadFileToS3({
-        //   filename: "videos/" + file.newFilename,
-        //   contentType: mime.getType(file.filepath) as string,
-        //   filepath: file.filepath,
-        // });
-        // fsPromise.unlink(file.filepath);
-        // return {
-        // url: (s3Result as CompleteMultipartUploadCommandOutput)
-        //   .Location as string,
-        // type: MediaType.Video,
-        // };
+        const s3Result = await uploadFileToS3({
+          filename: "videos/" + file.newFilename,
+          contentType: mime.default.getType(file.filepath) as string,
+          filepath: file.filepath,
+        });
+        fsPromise.unlink(file.filepath);
         return {
-          url: isProduction
-            ? `${process.env.HOST}/static/video/${file.newFilename}`
-            : `http://localhost:${process.env.PORT}/static/video/${file.newFilename}`,
+          url: (s3Result as CompleteMultipartUploadCommandOutput)
+            .Location as string,
           type: MediaType.Video,
         };
+        // return {
+        //   url: isProduction
+        //     ? `${process.env.HOST}/static/video/${file.newFilename}`
+        //     : `http://localhost:${process.env.PORT}/static/video/${file.newFilename}`,
+        //   type: MediaType.Video
+        // }
       })
     );
     return result;

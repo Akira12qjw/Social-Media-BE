@@ -30,7 +30,7 @@ import {
   unfollowController,
   updateMeController,
   verifyForgotPasswordController,
-} from "~/controllers/user.controller";
+} from "~/controllers/user.controllers";
 import { wrapRequestHandler } from "~/utils/handlers";
 import { fillterMiddleware } from "~/middlewares/common.middlewares";
 import { UpdateMeReqBody } from "~/models/requests/User.requests";
