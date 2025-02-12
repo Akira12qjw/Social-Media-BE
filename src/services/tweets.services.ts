@@ -234,6 +234,7 @@ class TweetsService {
       total,
     };
   }
+
   async getNewFeeds({
     user_id,
     limit,

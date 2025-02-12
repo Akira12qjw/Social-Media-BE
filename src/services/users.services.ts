@@ -13,10 +13,7 @@ import databaseService from "~/services/database.services";
 import { hashPassword } from "~/utils/crypto";
 import { signToken, verifyToken } from "~/utils/jwt";
 import axios from "axios";
-// import {
-//   sendForgotPasswordEmail,
-//   sendVerifyRegisterEmail,
-// } from "~/utils/email";
+
 import { envConfig } from "~/constants/config";
 import { ErrorWithStatus } from "~/models/errors";
 import {
@@ -168,6 +165,7 @@ class UsersService {
     // 4. Server verify email_verify_token
     // 5. Client receive access_token and refresh_token
     await sendVerifyRegisterEmail(payload.email, email_verify_token);
+    console.log("email_verify_token: ", email_verify_token);
     return {
       access_token,
       refresh_token,

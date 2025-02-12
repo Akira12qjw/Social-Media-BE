@@ -130,31 +130,53 @@ class MediasService {
         const newName = getNameFromFullName(file.newFilename);
         const newFullFilename = `${newName}.jpg`;
         const newPath = path.resolve(UPLOAD_IMAGE_DIR, newFullFilename);
-        await sharp(file.filepath).jpeg().toFile(newPath);
-        const s3Result = await uploadFileToS3({
-          filename: "images/" + newFullFilename,
-          filepath: newPath,
-          contentType: mime.default.getType(newPath) as string,
-        });
-        await Promise.all([
-          fsPromise.unlink(file.filepath),
-          fsPromise.unlink(newPath),
-        ]);
-        return {
-          url: (s3Result as CompleteMultipartUploadCommandOutput)
-            .Location as string,
-          type: MediaType.Image,
-        };
-        // return {
-        //   url: isProduction
-        //     ? `${process.env.HOST}/static/image/${newFullFilename}`
-        //     : `http://localhost:${process.env.PORT}/static/image/${newFullFilename}`,
-        //   type: MediaType.Image
-        // }
+
+        try {
+          // Process image
+          await sharp(file.filepath).jpeg().toFile(newPath);
+
+          // Upload to S3
+          const s3Result = await uploadFileToS3({
+            filename: "images/" + newFullFilename,
+            filepath: newPath,
+            contentType: mime.default.getType(newPath) as string,
+          });
+
+          // Add a small delay to ensure file handles are closed
+          await new Promise((resolve) => setTimeout(resolve, 100));
+
+          // Delete files with error handling
+          await Promise.all([
+            fsPromise
+              .unlink(file.filepath)
+              .catch((err) => console.error("Error deleting temp file:", err)),
+            fsPromise
+              .unlink(newPath)
+              .catch((err) =>
+                console.error("Error deleting processed file:", err)
+              ),
+          ]);
+
+          return {
+            url: (s3Result as CompleteMultipartUploadCommandOutput)
+              .Location as string,
+            type: MediaType.Image,
+          };
+        } catch (error) {
+          // Clean up files in case of error
+          try {
+            await fsPromise.unlink(file.filepath);
+            await fsPromise.unlink(newPath);
+          } catch (cleanupError) {
+            console.error("Error during cleanup:", cleanupError);
+          }
+          throw error;
+        }
       })
     );
     return result;
   }
+
   async uploadVideo(req: Request) {
     const files = await handleUploadVideo(req);
     const mime = await import("mime");

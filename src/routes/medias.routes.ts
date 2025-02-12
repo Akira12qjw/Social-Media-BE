@@ -12,7 +12,6 @@ import {
 import { wrapRequestHandler } from "~/utils/handlers";
 
 const mediasRouter = Router();
-
 mediasRouter.post(
   "/upload-image",
   accessTokenValidator,
