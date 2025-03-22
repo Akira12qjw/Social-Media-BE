@@ -22,6 +22,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { envConfig, isProduction } from "~/constants/config";
 import conversationsRouter from "./routes/conversations.routes";
+// import { Faker } from "@faker-js/faker";
 // const file = fs.readFileSync(path.resolve("twitter-swagger.yaml"), "utf8");
 // const swaggerDocument = YAML.parse(file);
 
@@ -72,7 +73,10 @@ app.use(limiter);
 const httpServer = createServer(app);
 app.use(helmet());
 const corsOptions: CorsOptions = {
-  origin: isProduction ? envConfig.clientUrl : "*",
+  origin: ["http://localhost:3000"], // Thêm domain của client
+  credentials: true, // Cho phép gửi cookie qua CORS
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use(cors(corsOptions));
 const port = envConfig.port;

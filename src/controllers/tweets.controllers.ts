@@ -73,10 +73,12 @@ export const getNewFeedsController = async (
   const user_id = req.decoded_authorization?.user_id as string;
   const limit = Number(req.query.limit);
   const page = Number(req.query.page);
+  const type = req.query.type as string;
   const result = await tweetsService.getNewFeeds({
     user_id,
     limit,
     page,
+    type,
   });
 
   return res.json({

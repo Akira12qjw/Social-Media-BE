@@ -239,10 +239,12 @@ class TweetsService {
     user_id,
     limit,
     page,
+    type = "all",
   }: {
     user_id: string;
     limit: number;
     page: number;
+    type?: string;
   }) {
     const user_id_obj = new ObjectId(user_id);
     const followed_user_ids = await databaseService.followers
@@ -261,16 +263,49 @@ class TweetsService {
     const ids = followed_user_ids.map((item) => item.followed_user_id);
     // Mong muốn newfees sẽ lấy luôn cả tweet của mình
     ids.push(user_id_obj);
+
+    const matchStage =
+      type === "following"
+        ? {
+            $and: [
+              { user_id: { $in: ids } }, // Only tweets from followed users and self
+              {
+                $or: [
+                  { audience: 0 }, // Public tweets
+                  {
+                    $and: [
+                      { audience: 1 }, // Private tweets
+                      {
+                        "user.twitter_circle": {
+                          $in: [user_id_obj],
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          }
+        : {
+            $or: [
+              { audience: 0 }, // All public tweets
+              {
+                $and: [
+                  { audience: 1 },
+                  { user_id: { $in: ids } }, // Private tweets from followed users
+                  {
+                    "user.twitter_circle": {
+                      $in: [user_id_obj],
+                    },
+                  },
+                ],
+              },
+            ],
+          };
+
     const [tweets, total] = await Promise.all([
       databaseService.tweets
         .aggregate([
-          {
-            $match: {
-              user_id: {
-                $in: ids,
-              },
-            },
-          },
           {
             $lookup: {
               from: "users",
@@ -285,28 +320,15 @@ class TweetsService {
             },
           },
           {
-            $match: {
-              $or: [
-                {
-                  audience: 0,
-                },
-                {
-                  $and: [
-                    {
-                      audience: 1,
-                    },
-                    {
-                      "user.twitter_circle": {
-                        $in: [user_id_obj],
-                      },
-                    },
-                  ],
-                },
-              ],
+            $match: matchStage,
+          },
+          {
+            $sort: {
+              created_at: -1, // Sort by newest first
             },
           },
           {
-            $skip: limit * (page - 1), // Công thức phân trang
+            $skip: limit * (page - 1),
           },
           {
             $limit: limit,
@@ -427,13 +449,6 @@ class TweetsService {
       databaseService.tweets
         .aggregate([
           {
-            $match: {
-              user_id: {
-                $in: ids,
-              },
-            },
-          },
-          {
             $lookup: {
               from: "users",
               localField: "user_id",
@@ -447,25 +462,7 @@ class TweetsService {
             },
           },
           {
-            $match: {
-              $or: [
-                {
-                  audience: 0,
-                },
-                {
-                  $and: [
-                    {
-                      audience: 1,
-                    },
-                    {
-                      "user.twitter_circle": {
-                        $in: [user_id_obj],
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
+            $match: matchStage,
           },
           {
             $count: "total",
