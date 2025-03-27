@@ -2,82 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/index.js",
+      "src": "src/index.ts",
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api-docs",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/api-docs/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/users",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/users/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/medias",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/medias/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/tweets",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/tweets/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/bookmarks",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/bookmarks/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/likes",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/likes/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/search",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/search/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/conversations",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/conversations/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "dist/index.js"
+      "source": "/(.*)",
+      "destination": "/"
     }
   ]
 }
