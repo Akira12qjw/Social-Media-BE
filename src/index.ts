@@ -30,6 +30,14 @@ const options: swaggerJsdoc.Options = {
       title: "X clone (Twitter API)",
       version: "1.0.0",
     },
+    servers: [
+      {
+        url: isProduction
+          ? "https://social-media-be-lilac.vercel.app"
+          : `http://localhost:${process.env.PORT || envConfig.port}`,
+        description: isProduction ? "Production server" : "Development server",
+      },
+    ],
     components: {
       securitySchemes: {
         BearerAuth: {
