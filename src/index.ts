@@ -32,6 +32,14 @@ const options: swaggerJsdoc.Options = {
       title: "X clone (Twitter API)",
       version: "1.0.0",
     },
+    servers: [
+      {
+        url: isProduction
+          ? "https://social-media-be-lilac.vercel.app"
+          : `http://localhost:${process.env.PORT || envConfig.port}`,
+        description: isProduction ? "Production server" : "Development server",
+      },
+    ],
     components: {
       securitySchemes: {
         BearerAuth: {
@@ -91,6 +99,16 @@ app.use("/conversations", conversationsRouter);
 app.use("/static", staticRouter);
 app.use("/static/video", express.static(UPLOAD_VIDEO_DIR));
 app.use(defaultErrorHandler);
+
+// Add default route
+app.get("/", (req, res) => {
+  res.redirect("/api-docs");
+});
+
+// Add health check route
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 initSocket(httpServer);
 
