@@ -8,76 +8,13 @@
   ],
   "routes": [
     {
-      "src": "/api-docs",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/api-docs/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/users",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/users/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/medias",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/medias/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/tweets",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/tweets/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/bookmarks",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/bookmarks/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/likes",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/likes/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/search",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/search/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/conversations",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/conversations/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "dist/index.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "dist/index.js"
+      "dest": "/dist/index.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+        "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+      }
     }
   ]
 }
