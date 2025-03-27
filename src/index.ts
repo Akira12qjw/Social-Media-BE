@@ -70,13 +70,13 @@ app.use(limiter);
 const httpServer = createServer(app);
 app.use(helmet());
 const corsOptions: CorsOptions = {
-  origin: ["http://localhost:3000"], // Thêm domain của client
-  credentials: true, // Cho phép gửi cookie qua CORS
+  origin: ["http://localhost:3000", "https://social-media-be-lilac.vercel.app"], // Thêm domain của Vercel
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use(cors(corsOptions));
-const port = envConfig.port;
+const port = process.env.PORT || envConfig.port;
 
 // Tạo folder upload
 initFolder();
