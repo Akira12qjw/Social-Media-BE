@@ -35,7 +35,7 @@ const options: swaggerJsdoc.Options = {
     servers: [
       {
         url: isProduction
-          ? "https://social-media-be-lilac.vercel.app"
+          ? "https://social-media-be-smoky.vercel.app"
           : `http://localhost:${process.env.PORT || envConfig.port}`,
         description: isProduction ? "Production server" : "Development server",
       },
