@@ -5,24 +5,25 @@ import mediasRouter from "~/routes/medias.routes";
 import staticRouter from "~/routes/static.routes";
 import usersRouter from "~/routes/users.routes";
 import databaseService from "~/services/database.services";
-import { initFolder } from "~/utils/files";
 import cors, { CorsOptions } from "cors";
 import tweetsRouter from "~/routes/tweets.routes";
 import bookmarksRouter from "~/routes/bookmarks.routes";
 import likesRouter from "~/routes/likes.routes";
 import searchRouter from "~/routes/search.routes";
 import { createServer } from "http";
+import conversationsRouter from "~/routes/conversations.routes";
 import initSocket from "~/utils/socket";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import YAML from "yaml";
+// import fs from 'fs'
+// import path from 'path'
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { envConfig, isProduction } from "~/constants/config";
-import conversationsRouter from "./routes/conversations.routes";
-import path from "path";
-// import { Faker } from "@faker-js/faker";
-// const file = fs.readFileSync(path.resolve("twitter-swagger.yaml"), "utf8");
-// const swaggerDocument = YAML.parse(file);
+import { initFolder } from "./utils/files";
+// const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
+// const swaggerDocument = YAML.parse(file)
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -31,14 +32,6 @@ const options: swaggerJsdoc.Options = {
       title: "X clone (Twitter API)",
       version: "1.0.0",
     },
-    servers: [
-      {
-        url: isProduction
-          ? "https://social-media-be-lilac.vercel.app"
-          : `http://localhost:${process.env.PORT || envConfig.port}`,
-        description: isProduction ? "Production server" : "Development server",
-      },
-    ],
     components: {
       securitySchemes: {
         BearerAuth: {
@@ -55,7 +48,7 @@ const options: swaggerJsdoc.Options = {
     ],
     persistAuthorization: true,
   },
-  apis: [path.join(process.cwd(), "openapi/*.yaml")],
+  apis: ["./openapi/*.yaml"], // files containing annotations as above
 };
 const openapiSpecification = swaggerJsdoc(options);
 
@@ -79,13 +72,10 @@ app.use(limiter);
 const httpServer = createServer(app);
 app.use(helmet());
 const corsOptions: CorsOptions = {
-  origin: ["http://localhost:3000", "https://social-media-be-lilac.vercel.app"], // Thêm domain của Vercel
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: isProduction ? envConfig.clientUrl : "*",
 };
 app.use(cors(corsOptions));
-const port = process.env.PORT || envConfig.port;
+const port = envConfig.port;
 
 // Tạo folder upload
 initFolder();
@@ -105,5 +95,5 @@ app.use(defaultErrorHandler);
 initSocket(httpServer);
 
 httpServer.listen(port, () => {
-  console.log(`http://localhost:${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
