@@ -8,39 +8,47 @@
   ],
   "routes": [
     {
-      "src": "/api-docs(.*)",
+      "src": "/openapi/(.*)",
+      "dest": "/openapi/$1"
+    },
+    {
+      "src": "/api-docs",
       "dest": "dist/index.js"
     },
     {
-      "src": "/users(.*)",
+      "src": "/api-docs/(.*)",
       "dest": "dist/index.js"
     },
     {
-      "src": "/medias(.*)",
+      "src": "/users/(.*)",
       "dest": "dist/index.js"
     },
     {
-      "src": "/tweets(.*)",
+      "src": "/medias/(.*)",
       "dest": "dist/index.js"
     },
     {
-      "src": "/bookmarks(.*)",
+      "src": "/tweets/(.*)",
       "dest": "dist/index.js"
     },
     {
-      "src": "/likes(.*)",
+      "src": "/bookmarks/(.*)",
       "dest": "dist/index.js"
     },
     {
-      "src": "/search(.*)",
+      "src": "/likes/(.*)",
       "dest": "dist/index.js"
     },
     {
-      "src": "/conversations(.*)",
+      "src": "/search/(.*)",
       "dest": "dist/index.js"
     },
     {
-      "src": "/static(.*)",
+      "src": "/conversations/(.*)",
+      "dest": "dist/index.js"
+    },
+    {
+      "src": "/static/(.*)",
       "dest": "dist/index.js"
     },
     {

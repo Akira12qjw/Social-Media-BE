@@ -19,6 +19,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { envConfig, isProduction } from "~/constants/config";
 import conversationsRouter from "./routes/conversations.routes";
+import path from "path";
 // import { Faker } from "@faker-js/faker";
 // const file = fs.readFileSync(path.resolve("twitter-swagger.yaml"), "utf8");
 // const swaggerDocument = YAML.parse(file);
@@ -54,7 +55,7 @@ const options: swaggerJsdoc.Options = {
     ],
     persistAuthorization: true,
   },
-  apis: ["./openapi/*.yaml"], // files containing annotations as above
+  apis: [path.join(process.cwd(), "openapi/*.yaml")],
 };
 const openapiSpecification = swaggerJsdoc(options);
 
