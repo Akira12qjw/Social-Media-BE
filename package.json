@@ -9,7 +9,7 @@
     "dev:prod": "cross-env NODE_ENV=production npx nodemon",
     "prebuild": "rimraf ./dist",
     "build": "tsc && tsc-alias && npm run copy-files",
-    "copy-files": "mkdir -p dist/openapi && cp -r openapi/* dist/openapi/ && cp .env.production dist/.env",
+    "copy-files": "cp -r openapi dist/ && cp -r .env* dist/",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

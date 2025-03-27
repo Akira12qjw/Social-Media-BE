@@ -68,65 +68,25 @@ databaseService.connect().then(() => {
   databaseService.indexTweets();
 });
 const app = express();
-
-// Add HTTPS redirect middleware for production
-if (isProduction) {
-  app.use((req, res, next) => {
-    if (req.headers["x-forwarded-proto"] !== "https") {
-      return res.redirect(`https://${req.headers.host}${req.url}`);
-    }
-    next();
-  });
-}
-
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  // store: ... , // Use an external store for more precise rate limiting
 });
 app.use(limiter);
 
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: false,
-  })
-);
-
+const httpServer = createServer(app);
+app.use(helmet());
 const corsOptions: CorsOptions = {
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With",
-    "Accept",
-    "Origin",
-  ],
-  credentials: true,
+  origin: isProduction ? envConfig.clientUrl : "*",
 };
 app.use(cors(corsOptions));
-
-// Enable pre-flight for all routes
-app.options("*", cors(corsOptions));
-
-const port = process.env.PORT || envConfig.port;
+const port = envConfig.port;
 
 // Tạo folder upload
 initFolder();
-
-// Add default route
-app.get("/", (req, res) => {
-  res.redirect("/api-docs");
-});
-
-// Add health check route
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
-});
-
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 app.use("/users", usersRouter);
@@ -140,9 +100,18 @@ app.use("/static", staticRouter);
 app.use("/static/video", express.static(UPLOAD_VIDEO_DIR));
 app.use(defaultErrorHandler);
 
-const httpServer = createServer(app);
+// Add default route
+app.get("/", (req, res) => {
+  res.redirect("/api-docs");
+});
+
+// Add health check route
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 initSocket(httpServer);
 
 httpServer.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
