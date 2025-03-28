@@ -15,5 +15,8 @@
       "source": "/(.*)",
       "destination": "/src/index.ts"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

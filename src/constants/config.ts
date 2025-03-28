@@ -1,9 +1,14 @@
 import { config } from "dotenv";
-config();
 import fs from "fs";
 import path from "path";
+
+// Load default env first
+config();
+
 const env = process.env.NODE_ENV;
 const envFilename = `.env.${env}`;
+
+// Only load env file if not in production (Vercel)
 if (!env) {
   console.log(
     `Bạn chưa cung cấp biến môi trường NODE_ENV (ví dụ: development, production)`
@@ -11,22 +16,26 @@ if (!env) {
   console.log(`Phát hiện NODE_ENV = ${env}`);
   process.exit(1);
 }
-console.log(
-  `Phát hiện NODE_ENV = ${env}, vì thế app sẽ dùng file môi trường là ${envFilename}`
-);
-if (!fs.existsSync(path.resolve(envFilename))) {
-  console.log(`Không tìm thấy file môi trường ${envFilename}`);
+
+if (env !== "production") {
   console.log(
-    `Lưu ý: App không dùng file .env, ví dụ môi trường là development thì app sẽ dùng file .env.development`
+    `Phát hiện NODE_ENV = ${env}, vì thế app sẽ dùng file môi trường là ${envFilename}`
   );
-  console.log(
-    `Vui lòng tạo file ${envFilename} và tham khảo nội dung ở file .env.example`
-  );
-  process.exit(1);
+  if (!fs.existsSync(path.resolve(envFilename))) {
+    console.log(`Không tìm thấy file môi trường ${envFilename}`);
+    console.log(
+      `Lưu ý: App không dùng file .env, ví dụ môi trường là development thì app sẽ dùng file .env.development`
+    );
+    console.log(
+      `Vui lòng tạo file ${envFilename} và tham khảo nội dung ở file .env.example`
+    );
+    process.exit(1);
+  }
+  config({
+    path: envFilename,
+  });
 }
-config({
-  path: envFilename,
-});
+
 export const isProduction = env === "production";
 
 export const envConfig = {
