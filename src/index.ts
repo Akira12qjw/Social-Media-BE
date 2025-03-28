@@ -1,18 +1,18 @@
 import express from "express";
 import { UPLOAD_VIDEO_DIR } from "./constants/dir";
-import { defaultErrorHandler } from "~/middlewares/error.middlewares";
-import mediasRouter from "~/routes/medias.routes";
-import staticRouter from "~/routes/static.routes";
-import usersRouter from "~/routes/users.routes";
-import databaseService from "~/services/database.services";
+import { defaultErrorHandler } from "./middlewares/error.middlewares";
+import mediasRouter from "./routes/medias.routes";
+import staticRouter from "./routes/static.routes";
+import usersRouter from "./routes/users.routes";
+import databaseService from "./services/database.services";
 import cors, { CorsOptions } from "cors";
-import tweetsRouter from "~/routes/tweets.routes";
-import bookmarksRouter from "~/routes/bookmarks.routes";
-import likesRouter from "~/routes/likes.routes";
-import searchRouter from "~/routes/search.routes";
+import tweetsRouter from "./routes/tweets.routes";
+import bookmarksRouter from "./routes/bookmarks.routes";
+import likesRouter from "./routes/likes.routes";
+import searchRouter from "./routes/search.routes";
 import { createServer } from "http";
-import conversationsRouter from "~/routes/conversations.routes";
-import initSocket from "~/utils/socket";
+import conversationsRouter from "./routes/conversations.routes";
+import initSocket from "./utils/socket";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import YAML from "yaml";
@@ -20,7 +20,7 @@ import YAML from "yaml";
 // import path from 'path'
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
-import { envConfig, isProduction } from "~/constants/config";
+import { envConfig, isProduction } from "./constants/config";
 import { initFolder } from "./utils/files";
 // const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
 // const swaggerDocument = YAML.parse(file)
