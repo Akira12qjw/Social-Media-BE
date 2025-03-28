@@ -35,7 +35,7 @@ const options: swaggerJsdoc.Options = {
     servers: [
       {
         url: isProduction
-          ? "https://social-media-be-smoky.vercel.app"
+          ? "https://social-media-be-psi.vercel.app"
           : `http://localhost:${process.env.PORT || envConfig.port}`,
         description: isProduction ? "Production server" : "Development server",
       },
@@ -56,8 +56,9 @@ const options: swaggerJsdoc.Options = {
     ],
     persistAuthorization: true,
   },
-  apis: ["./openapi/*.yaml"], // files containing annotations as above
+  apis: ["./openapi/*.yaml"],
 };
+
 const openapiSpecification = swaggerJsdoc(options);
 
 databaseService.connect().then(() => {
@@ -92,7 +93,21 @@ const port = envConfig.port;
 // Tạo folder upload
 initFolder();
 app.use(express.json());
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+app.use("/api-docs", swaggerUi.serve);
+app.get(
+  "/api-docs",
+  swaggerUi.setup(openapiSpecification, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+    customCssUrl:
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
+    customJs: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js",
+    ],
+  })
+);
 app.use("/users", usersRouter);
 app.use("/medias", mediasRouter);
 app.use("/tweets", tweetsRouter);
