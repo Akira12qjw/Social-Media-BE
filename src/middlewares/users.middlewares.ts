@@ -4,8 +4,6 @@ import { JsonWebTokenError } from "jsonwebtoken";
 import HTTP_STATUS from "../constants/httpStatus";
 import { USERS_MESSAGES } from "../constants/messages";
 import { ErrorWithStatus } from "../models/errors";
-import RefreshToken from "../models/schemas/RefreshToken.schema";
-// import { ErrorWithStatus } from "~/models/Errors";
 import databaseService from "../services/database.services";
 import usersService from "../services/users.services";
 import { hashPassword } from "../utils/crypto";

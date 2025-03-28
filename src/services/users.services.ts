@@ -6,20 +6,20 @@ import {
   RegisterReqBody,
   UpdateMeReqBody,
 } from "../models/requests/User.requests";
-import Follower from "~/models/schemas/Follower.schema";
-import RefreshToken from "~/models/schemas/RefreshToken.schema";
-import User from "~/models/schemas/User.schema";
-import databaseService from "~/services/database.services";
-import { hashPassword } from "~/utils/crypto";
-import { signToken, verifyToken } from "~/utils/jwt";
+import Follower from "../models/schemas/Follower.schema";
+import RefreshToken from "../models/schemas/RefreshToken.schema";
+import User from "../models/schemas/User.schema";
+import databaseService from "./database.services";
+import { hashPassword } from "../utils/crypto";
+import { signToken, verifyToken } from "../utils/jwt";
 import axios from "axios";
 
-import { envConfig } from "~/constants/config";
-import { ErrorWithStatus } from "~/models/errors";
+import { envConfig } from "../constants/config";
+import { ErrorWithStatus } from "../models/errors";
 import {
   sendForgotPasswordEmail,
   sendVerifyRegisterEmail,
-} from "~/utils/email";
+} from "../utils/email";
 
 class UsersService {
   private signAccessToken({

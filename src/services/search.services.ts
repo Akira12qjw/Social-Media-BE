@@ -4,8 +4,8 @@ import {
   MediaTypeQuery,
   PeopleFollow,
   TweetType,
-} from "~/constants/enums";
-import databaseService from "~/services/database.services";
+} from "../constants/enums";
+import databaseService from "./database.services";
 
 class SearchService {
   async search({

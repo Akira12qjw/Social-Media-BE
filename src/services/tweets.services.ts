@@ -1,10 +1,10 @@
 import { ObjectId, WithId } from "mongodb";
-import { TweetType } from "~/constants/enums";
-import { TweetRequestBody } from "~/models/requests/Tweet.requests";
-import Hashtag from "~/models/schemas/Hashtag.chema";
-import Tweet from "~/models/schemas/Tweet.chema";
+import { TweetType } from "../constants/enums";
+import { TweetRequestBody } from "../models/requests/Tweet.requests";
+import Hashtag from "../models/schemas/Hashtag.chema";
+import Tweet from "../models/schemas/Tweet.chema";
 
-import databaseService from "~/services/database.services";
+import databaseService from "./database.services";
 
 class TweetsService {
   async checkAndCreateHashtags(hashtags: string[]) {

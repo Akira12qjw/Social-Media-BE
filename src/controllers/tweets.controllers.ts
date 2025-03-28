@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
-import { TweetType } from "~/constants/enums";
+import { TweetType } from "../constants/enums";
 import {
   Pagination,
   TweetParam,
   TweetQuery,
   TweetRequestBody,
-} from "~/models/requests/Tweet.requests";
-import { TokenPayload } from "~/models/requests/User.requests";
-import tweetsService from "~/services/tweets.services";
+} from "../models/requests/Tweet.requests";
+import { TokenPayload } from "../models/requests/User.requests";
+import tweetsService from "../services/tweets.services";
 
 export const createTweetController = async (
   req: Request<ParamsDictionary, any, TweetRequestBody>,

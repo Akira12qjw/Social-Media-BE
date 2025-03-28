@@ -3,7 +3,7 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
 import fs from "fs";
 import path from "path";
-import { envConfig } from "~/constants/config";
+import { envConfig } from "../constants/config";
 
 // Create SES service object.
 const sesClient = new SESClient({

@@ -1,6 +1,6 @@
 import { ParamsDictionary } from "express-serve-static-core";
 import { JwtPayload } from "jsonwebtoken";
-import { TokenType, UserVerifyStatus } from "~/constants/enums";
+import { TokenType, UserVerifyStatus } from "../../constants/enums";
 
 export interface UpdateMeReqBody {
   name?: string;

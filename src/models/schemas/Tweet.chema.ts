@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import { TweetAudience, TweetType } from "~/constants/enums";
+import { TweetAudience, TweetType } from "../../constants/enums";
 import { Media } from "../other";
 
 interface TweetConstructor {

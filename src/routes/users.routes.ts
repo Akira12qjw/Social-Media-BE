@@ -30,10 +30,10 @@ import {
   unfollowController,
   updateMeController,
   verifyForgotPasswordController,
-} from "~/controllers/user.controllers";
-import { wrapRequestHandler } from "~/utils/handlers";
-import { fillterMiddleware } from "~/middlewares/common.middlewares";
-import { UpdateMeReqBody } from "~/models/requests/User.requests";
+} from "../controllers/user.controllers";
+import { wrapRequestHandler } from "../utils/handlers";
+import { fillterMiddleware } from "../middlewares/common.middlewares";
+import { UpdateMeReqBody } from "../models/requests/User.requests";
 const usersRouter = Router();
 
 usersRouter.post("/login", loginValidator, wrapRequestHandler(loginController));

@@ -4,20 +4,20 @@ import {
   getNewFeedsController,
   getTweetChildrenController,
   getTweetController,
-} from "~/controllers/tweets.controllers";
+} from "../controllers/tweets.controllers";
 import {
   audienceValidator,
   createTweetValidator,
   getTweetChildrenValidator,
   paginationValidator,
   tweetIdValidator,
-} from "~/middlewares/tweets.middlewares";
+} from "../middlewares/tweets.middlewares";
 import {
   accessTokenValidator,
   isUserLoggedInValidator,
   verifiedUserValidator,
-} from "~/middlewares/users.middlewares";
-import { wrapRequestHandler } from "~/utils/handlers";
+} from "../middlewares/users.middlewares";
+import { wrapRequestHandler } from "../utils/handlers";
 
 const tweetsRouter = Router();
 

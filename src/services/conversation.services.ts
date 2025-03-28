@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import databaseService from "~/services/database.services";
+import databaseService from "./database.services";
 
 class ConversationService {
   async getConversations({

@@ -21,10 +21,10 @@ import {
   UpdateMeReqBody,
   VerifyEmailReqBody,
   VerifyForgotPasswordReqBody,
-} from "~/models/requests/User.requests";
-import User from "~/models/schemas/User.schema";
-import databaseService from "~/services/database.services";
-import usersService from "~/services/users.services";
+} from "../models/requests/User.requests";
+import User from "../models/schemas/User.schema";
+import databaseService from "../services/database.services";
+import usersService from "../services/users.services";
 config();
 export const loginController = async (
   req: Request<ParamsDictionary, any, LoginReqBody>,

@@ -5,15 +5,15 @@ import {
   TweetAudience,
   TweetType,
   UserVerifyStatus,
-} from "~/constants/enums";
-import { TweetRequestBody } from "~/models/requests/Tweet.requests";
-import { RegisterReqBody } from "~/models/requests/User.requests";
-import Follower from "~/models/schemas/Follower.schema";
-import Hashtag from "~/models/schemas/Hashtag.chema";
-import Tweet from "~/models/schemas/Tweet.chema";
-import User from "~/models/schemas/User.schema";
-import databaseService from "~/services/database.services";
-import { hashPassword } from "~/utils/crypto";
+} from "../constants/enums";
+import { TweetRequestBody } from "../models/requests/Tweet.requests";
+import { RegisterReqBody } from "../models/requests/User.requests";
+import Follower from "../models/schemas/Follower.schema";
+import Hashtag from "../models/schemas/Hashtag.chema";
+import Tweet from "../models/schemas/Tweet.chema";
+import User from "../models/schemas/User.schema";
+import databaseService from "../services/database.services";
+import { hashPassword } from "../utils/crypto";
 
 /**
  * Yêu cầu: Mọi người phải cài đặt `@faker-js/faker` vào project

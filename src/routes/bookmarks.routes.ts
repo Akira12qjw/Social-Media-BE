@@ -2,17 +2,16 @@ import { Router } from "express";
 import {
   bookmarkTweetController,
   unbookmarkTweetController,
-} from "~/controllers/bookmarks.controllers";
-import { createTweetController } from "~/controllers/tweets.controllers";
+} from "../controllers/bookmarks.controllers";
 import {
   createTweetValidator,
   tweetIdValidator,
-} from "~/middlewares/tweets.middlewares";
+} from "../middlewares/tweets.middlewares";
 import {
   accessTokenValidator,
   verifiedUserValidator,
-} from "~/middlewares/users.middlewares";
-import { wrapRequestHandler } from "~/utils/handlers";
+} from "../middlewares/users.middlewares";
+import { wrapRequestHandler } from "../utils/handlers";
 
 const bookmarksRouter = Router();
 

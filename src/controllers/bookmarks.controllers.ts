@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
-import { BOOKMARK_MESSAGES } from "~/constants/messages";
-import { BookmarkTweetReqBody } from "~/models/requests/Bookmark.requests";
+import { BOOKMARK_MESSAGES } from "../constants/messages";
+import { BookmarkTweetReqBody } from "../models/requests/Bookmark.requests";
 
-import { TokenPayload } from "~/models/requests/User.requests";
-import bookmarksService from "~/services/bookmarks.services";
+import { TokenPayload } from "../models/requests/User.requests";
+import bookmarksService from "../services/bookmarks.services";
 
 export const bookmarkTweetController = async (
   req: Request<ParamsDictionary, any, BookmarkTweetReqBody>,

@@ -3,13 +3,13 @@ import sharp from "sharp";
 import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from "../constants/dir";
 import path from "path";
 import fsPromise from "fs/promises";
-import { envConfig, isProduction } from "~/constants/config";
-import { EncodingStatus, MediaType } from "~/constants/enums";
-import { Media } from "~/models/other";
-import { encodeHLSWithMultipleVideoStreams } from "~/utils/video";
-import databaseService from "~/services/database.services";
-import VideoStatus from "~/models/schemas/VideoStatus.schema";
-import { uploadFileToS3 } from "~/utils/s3";
+import { envConfig, isProduction } from "../constants/config";
+import { EncodingStatus, MediaType } from "../constants/enums";
+import { Media } from "../models/other";
+import { encodeHLSWithMultipleVideoStreams } from "../utils/video";
+import databaseService from "./database.services";
+import VideoStatus from "../models/schemas/VideoStatus.schema";
+import { uploadFileToS3 } from "../utils/s3";
 import { CompleteMultipartUploadCommandOutput } from "@aws-sdk/client-s3";
 import { rimrafSync } from "rimraf";
 import {
@@ -17,7 +17,7 @@ import {
   getNameFromFullName,
   handleUploadImage,
   handleUploadVideo,
-} from "~/utils/files";
+} from "../utils/files";
 
 class Queue {
   items: string[];

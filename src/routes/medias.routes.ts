@@ -4,12 +4,12 @@ import {
   uploadVideoController,
   uploadVideoHLSController,
   videoStatusController,
-} from "~/controllers/medias.controllers";
+} from "../controllers/medias.controllers";
 import {
   accessTokenValidator,
   verifiedUserValidator,
-} from "~/middlewares/users.middlewares";
-import { wrapRequestHandler } from "~/utils/handlers";
+} from "../middlewares/users.middlewares";
+import { wrapRequestHandler } from "../utils/handlers";
 
 const mediasRouter = Router();
 mediasRouter.post(

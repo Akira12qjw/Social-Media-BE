@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { GetConversationsParams } from "~/models/requests/Conversation.requests";
-import conversationService from "~/services/conversation.services";
+import { GetConversationsParams } from "../models/requests/Conversation.requests";
+import conversationService from "../services/conversation.services";
 
 export const getConversationsController = async (
   req: Request<GetConversationsParams>,

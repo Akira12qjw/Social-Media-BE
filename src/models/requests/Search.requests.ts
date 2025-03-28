@@ -1,4 +1,4 @@
-import { MediaTypeQuery, PeopleFollow } from "~/constants/enums";
+import { MediaTypeQuery, PeopleFollow } from "../../constants/enums";
 import { Pagination } from "./Tweet.requests";
 import { Query } from "express-serve-static-core";
 

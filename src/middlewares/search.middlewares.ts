@@ -1,6 +1,6 @@
 import { checkSchema } from "express-validator";
-import { MediaTypeQuery } from "~/constants/enums";
-import { validate } from "~/utils/validation";
+import { MediaTypeQuery } from "../constants/enums";
+import { validate } from "../utils/validation";
 
 export const searchValidator = validate(
   checkSchema(

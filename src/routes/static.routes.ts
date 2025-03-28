@@ -4,7 +4,7 @@ import {
   serveM3u8Controller,
   serveSegmentController,
   serveVideoStreamController,
-} from "~/controllers/medias.controllers";
+} from "../controllers/medias.controllers";
 
 const staticRouter = Router();
 
