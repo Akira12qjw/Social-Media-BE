@@ -8,8 +8,25 @@ import {
   UPLOAD_VIDEO_DIR,
   UPLOAD_VIDEO_TEMP_DIR,
 } from "../constants/dir";
+import { isProduction } from "../constants/config";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { envConfig } from "../constants/config";
 // const nanoid = require("nanoid/non-secure");
+
+const s3Client = new S3Client({
+  region: envConfig.awsRegion,
+  credentials: {
+    accessKeyId: envConfig.awsAccessKeyId,
+    secretAccessKey: envConfig.awsSecretAccessKey,
+  },
+});
+
 export const initFolder = () => {
+  // Skip folder creation in production (Vercel)
+  if (isProduction) {
+    return;
+  }
+
   [UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_TEMP_DIR].forEach((dir) => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, {
@@ -21,6 +38,58 @@ export const initFolder = () => {
 
 export const handleUploadImage = async (req: Request) => {
   const formidalble = (await import("formidable")).default;
+
+  if (isProduction) {
+    // Handle S3 upload in production
+    const form = formidalble({
+      maxFiles: 4,
+      maxFileSize: 300 * 1024,
+      maxTotalFileSize: 300 * 1024 * 4,
+      filter: function ({ name, originalFilename, mimetype }) {
+        const valid = name === "image" && Boolean(mimetype?.includes("image/"));
+        if (!valid) {
+          form.emit("error" as any, new Error("File type is not valid") as any);
+        }
+        return valid;
+      },
+    });
+
+    return new Promise<File[]>((resolve, reject) => {
+      form.parse(req, async (err, fields, files) => {
+        if (err) {
+          return reject(err);
+        }
+        if (!files.image) {
+          return reject(new Error("File is empty"));
+        }
+
+        try {
+          const uploadedFiles = files.image as File[];
+          for (const file of uploadedFiles) {
+            const fileContent = fs.readFileSync(file.filepath);
+            const key = `images/${Date.now()}-${file.originalFilename}`;
+
+            await s3Client.send(
+              new PutObjectCommand({
+                Bucket: envConfig.s3BucketName,
+                Key: key,
+                Body: fileContent,
+                ContentType: file.mimetype || "image/jpeg",
+              })
+            );
+
+            // Update file path to S3 URL
+            file.filepath = `https://${envConfig.s3BucketName}.s3.${envConfig.awsRegion}.amazonaws.com/${key}`;
+          }
+          resolve(uploadedFiles);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  }
+
+  // Local upload for development
   const form = formidalble({
     uploadDir: UPLOAD_IMAGE_TEMP_DIR,
     maxFiles: 4,
@@ -35,12 +104,13 @@ export const handleUploadImage = async (req: Request) => {
       return valid;
     },
   });
+
   return new Promise<File[]>((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
       if (err) {
         return reject(err);
       }
-      if (!Boolean(files.image)) {
+      if (!files.image) {
         return reject(new Error("File is empty"));
       }
       resolve(files.image as File[]);
