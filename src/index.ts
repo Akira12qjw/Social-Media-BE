@@ -83,7 +83,24 @@ const limiter = rateLimit({
 app.use(limiter);
 
 const httpServer = createServer(app);
-app.use(helmet());
+
+// Cấu hình Helmet với CSP cho phép CDN
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+        imgSrc: ["'self'", "data:", "https:"],
+        connectSrc: ["'self'", "https:"],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: false,
+  })
+);
+
 const corsOptions: CorsOptions = {
   origin: isProduction ? envConfig.clientUrl : "*",
 };
@@ -93,6 +110,23 @@ const port = envConfig.port;
 // Tạo folder upload
 initFolder();
 app.use(express.json());
+
+// Serve swagger static files
+app.use(
+  "/api-docs/swagger-ui.css",
+  express.static(require.resolve("swagger-ui-dist/swagger-ui.css"))
+);
+app.use(
+  "/api-docs/swagger-ui-bundle.js",
+  express.static(require.resolve("swagger-ui-dist/swagger-ui-bundle.js"))
+);
+app.use(
+  "/api-docs/swagger-ui-standalone-preset.js",
+  express.static(
+    require.resolve("swagger-ui-dist/swagger-ui-standalone-preset.js")
+  )
+);
+
 app.use("/api-docs", swaggerUi.serve);
 app.get(
   "/api-docs",
@@ -100,12 +134,6 @@ app.get(
     swaggerOptions: {
       persistAuthorization: true,
     },
-    customCssUrl:
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
-    customJs: [
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js",
-    ],
   })
 );
 app.use("/users", usersRouter);

@@ -69,6 +69,7 @@
     "slash": "^5.1.0",
     "socket.io": "^4.8.1",
     "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-dist": "^5.20.2",
     "swagger-ui-express": "^5.0.1",
     "twiter-clone": "file:",
     "yaml": "^2.6.1",
