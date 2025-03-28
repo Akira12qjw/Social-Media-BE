@@ -3,9 +3,9 @@ import { NextFunction, Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { pick } from "lodash";
 import { ObjectId } from "mongodb";
-import { UserVerifyStatus } from "~/constants/enums";
-import HTTP_STATUS from "~/constants/httpStatus";
-import { USERS_MESSAGES } from "~/constants/messages";
+import { UserVerifyStatus } from "../constants/enums";
+import HTTP_STATUS from "../constants/httpStatus";
+import { USERS_MESSAGES } from "../constants/messages";
 import {
   ChangePasswordReqBody,
   FollowReqBody,

@@ -1,11 +1,11 @@
 import { ObjectId } from "mongodb";
-import { TokenType, UserVerifyStatus } from "~/constants/enums";
-import HTTP_STATUS from "~/constants/httpStatus";
-import { USERS_MESSAGES } from "~/constants/messages";
+import { TokenType, UserVerifyStatus } from "../constants/enums";
+import HTTP_STATUS from "../constants/httpStatus";
+import { USERS_MESSAGES } from "../constants/messages";
 import {
   RegisterReqBody,
   UpdateMeReqBody,
-} from "~/models/requests/User.requests";
+} from "../models/requests/User.requests";
 import Follower from "~/models/schemas/Follower.schema";
 import RefreshToken from "~/models/schemas/RefreshToken.schema";
 import User from "~/models/schemas/User.schema";

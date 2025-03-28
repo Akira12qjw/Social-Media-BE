@@ -1,21 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import { checkSchema, ParamSchema } from "express-validator";
 import { JsonWebTokenError } from "jsonwebtoken";
-import HTTP_STATUS from "~/constants/httpStatus";
-import { USERS_MESSAGES } from "~/constants/messages";
-import { ErrorWithStatus } from "~/models/errors";
-import RefreshToken from "~/models/schemas/RefreshToken.schema";
+import HTTP_STATUS from "../constants/httpStatus";
+import { USERS_MESSAGES } from "../constants/messages";
+import { ErrorWithStatus } from "../models/errors";
+import RefreshToken from "../models/schemas/RefreshToken.schema";
 // import { ErrorWithStatus } from "~/models/Errors";
-import databaseService from "~/services/database.services";
-import usersService from "~/services/users.services";
-import { hashPassword } from "~/utils/crypto";
-import { verifyToken } from "~/utils/jwt";
-import { validate } from "~/utils/validation";
+import databaseService from "../services/database.services";
+import usersService from "../services/users.services";
+import { hashPassword } from "../utils/crypto";
+import { verifyToken } from "../utils/jwt";
+import { validate } from "../utils/validation";
 import { capitalize } from "lodash";
 import { ObjectId } from "mongodb";
-import { TokenPayload } from "~/models/requests/User.requests";
-import { UserVerifyStatus } from "~/constants/enums";
-import { REGEX_USERNAME } from "~/constants/regex";
+import { TokenPayload } from "../models/requests/User.requests";
+import { UserVerifyStatus } from "../constants/enums";
+import { REGEX_USERNAME } from "../constants/regex";
 
 const passwordSchema: ParamSchema = {
   notEmpty: {

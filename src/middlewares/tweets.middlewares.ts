@@ -7,15 +7,15 @@ import {
   TweetAudience,
   TweetType,
   UserVerifyStatus,
-} from "~/constants/enums";
-import HTTP_STATUS from "~/constants/httpStatus";
-import { TWEETS_MESSAGES, USERS_MESSAGES } from "~/constants/messages";
-import { ErrorWithStatus } from "~/models/errors";
-import Tweet from "~/models/schemas/Tweet.chema";
-import databaseService from "~/services/database.services";
-import { numberEnumToArray } from "~/utils/commons";
-import { wrapRequestHandler } from "~/utils/handlers";
-import { validate } from "~/utils/validation";
+} from "../constants/enums";
+import HTTP_STATUS from "../constants/httpStatus";
+import { TWEETS_MESSAGES, USERS_MESSAGES } from "../constants/messages";
+import { ErrorWithStatus } from "../models/errors";
+import Tweet from "../models/schemas/Tweet.chema";
+import databaseService from "../services/database.services";
+import { numberEnumToArray } from "../utils/commons";
+import { wrapRequestHandler } from "../utils/handlers";
+import { validate } from "../utils/validation";
 
 const tweetTypes = numberEnumToArray(TweetType);
 const tweetAudiences = numberEnumToArray(TweetAudience);

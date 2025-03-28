@@ -1,14 +1,14 @@
 import { ObjectId } from "mongodb";
-import { verifyAccessToken } from "~/utils/commons";
-import { TokenPayload } from "~/models/requests/User.requests";
-import { UserVerifyStatus } from "~/constants/enums";
-import { USERS_MESSAGES } from "~/constants/messages";
-import HTTP_STATUS from "~/constants/httpStatus";
+import { verifyAccessToken } from "../utils/commons";
+import { TokenPayload } from "../models/requests/User.requests";
+import { UserVerifyStatus } from "../constants/enums";
+import { USERS_MESSAGES } from "../constants/messages";
+import HTTP_STATUS from "../constants/httpStatus";
 import { Server } from "socket.io";
-import Conversation from "~/models/schemas/Conversations.schema";
-import databaseService from "~/services/database.services";
+import Conversation from "../models/schemas/Conversations.schema";
+import databaseService from "../services/database.services";
 import { Server as ServerHttp } from "http";
-import { ErrorWithStatus } from "~/models/errors";
+import { ErrorWithStatus } from "../models/errors";
 
 const initSocket = (httpServer: ServerHttp) => {
   const io = new Server(httpServer, {

@@ -1,11 +1,11 @@
 import { Request } from "express";
 import { JsonWebTokenError } from "jsonwebtoken";
 import { capitalize } from "lodash";
-import { envConfig } from "~/constants/config";
-import HTTP_STATUS from "~/constants/httpStatus";
-import { USERS_MESSAGES } from "~/constants/messages";
-import { ErrorWithStatus } from "~/models/errors";
-import { verifyToken } from "~/utils/jwt";
+import { envConfig } from "../constants/config";
+import HTTP_STATUS from "../constants/httpStatus";
+import { USERS_MESSAGES } from "../constants/messages";
+import { ErrorWithStatus } from "../models/errors";
+import { verifyToken } from "../utils/jwt";
 
 export const numberEnumToArray = (numberEnum: {
   [key: string]: string | number;

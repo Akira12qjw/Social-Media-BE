@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { omit } from "lodash";
-import HTTP_STATUS from "~/constants/httpStatus";
-import { ErrorWithStatus } from "~/models/errors";
+import HTTP_STATUS from "../constants/httpStatus";
+import { ErrorWithStatus } from "../models/errors";
 
 export const defaultErrorHandler = (
   err: any,

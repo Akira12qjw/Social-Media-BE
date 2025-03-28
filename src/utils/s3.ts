@@ -4,8 +4,8 @@ import { config } from "dotenv";
 import { Response } from "express";
 import fs from "fs";
 import path from "path";
-import { envConfig } from "~/constants/config";
-import HTTP_STATUS from "~/constants/httpStatus";
+import { envConfig } from "../constants/config";
+import HTTP_STATUS from "../constants/httpStatus";
 config();
 const s3 = new S3({
   region: process.env.AWS_REGION,
