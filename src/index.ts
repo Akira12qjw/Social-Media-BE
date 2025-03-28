@@ -16,22 +16,24 @@ import initSocket from "./utils/socket";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import YAML from "yaml";
-// import fs from 'fs'
-// import path from 'path'
+import fs from "fs";
+import path from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { envConfig, isProduction } from "./constants/config";
 import { initFolder } from "./utils/files";
-// const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
-// const swaggerDocument = YAML.parse(file)
+
+// Load YAML files
+const componentsPath = path.join(__dirname, "../openapi/components.yaml");
+const pathsPath = path.join(__dirname, "../openapi/path.yaml");
+const componentsFile = fs.readFileSync(componentsPath, "utf8");
+const pathsFile = fs.readFileSync(pathsPath, "utf8");
+const components = YAML.parse(componentsFile);
+const paths = YAML.parse(pathsFile);
 
 const options: swaggerJsdoc.Options = {
   definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "X clone (Twitter API)",
-      version: "1.0.0",
-    },
+    ...paths,
     servers: [
       {
         url: isProduction
@@ -41,6 +43,7 @@ const options: swaggerJsdoc.Options = {
       },
     ],
     components: {
+      ...components.components,
       securitySchemes: {
         BearerAuth: {
           type: "http",
@@ -56,7 +59,7 @@ const options: swaggerJsdoc.Options = {
     ],
     persistAuthorization: true,
   },
-  apis: ["./openapi/*.yaml"],
+  apis: [], // We're loading YAML files manually now
 };
 
 const openapiSpecification = swaggerJsdoc(options);

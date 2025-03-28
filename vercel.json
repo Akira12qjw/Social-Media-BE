@@ -4,6 +4,10 @@
     {
       "src": "./src/index.ts",
       "use": "@vercel/node"
+    },
+    {
+      "src": "./openapi/**",
+      "use": "@vercel/static"
     }
   ],
   "rewrites": [
