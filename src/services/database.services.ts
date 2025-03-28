@@ -17,12 +17,24 @@ class DatabaseService {
   private client: MongoClient;
   private db: Db;
   constructor() {
-    this.client = new MongoClient(uri);
+    this.client = new MongoClient(uri, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+      connectTimeoutMS: 10000, // 10 seconds
+      socketTimeoutMS: 45000, // 45 seconds
+      maxPoolSize: 10,
+      minPoolSize: 5,
+    });
     this.db = this.client.db(process.env.DB_NAME);
   }
+
   async connect() {
     try {
       // Send a ping to confirm a successful connection
+      await this.client.connect();
       await this.client.db("admin").command({ ping: 1 });
       console.log(
         "Pinged your deployment. You successfully connected to MongoDB!"

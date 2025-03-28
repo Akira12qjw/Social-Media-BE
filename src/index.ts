@@ -64,13 +64,38 @@ const options: swaggerJsdoc.Options = {
 
 const openapiSpecification = swaggerJsdoc(options);
 
-databaseService.connect().then(() => {
-  databaseService.indexUser();
-  databaseService.indexRefreshToken();
-  databaseService.indexVideoStatus();
-  databaseService.indexFollowers();
-  databaseService.indexTweets();
+// Retry database connection
+const connectWithRetry = async (retries = 5, delay = 5000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await databaseService.connect();
+      await databaseService.indexUser();
+      await databaseService.indexRefreshToken();
+      await databaseService.indexVideoStatus();
+      await databaseService.indexFollowers();
+      await databaseService.indexTweets();
+      console.log("Successfully connected to MongoDB");
+      return;
+    } catch (error) {
+      console.log(
+        `Failed to connect to MongoDB (attempt ${i + 1}/${retries}):`,
+        error
+      );
+      if (i < retries - 1) {
+        console.log(`Retrying in ${delay / 1000} seconds...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      } else {
+        throw error;
+      }
+    }
+  }
+};
+
+connectWithRetry().catch((error) => {
+  console.error("Failed to connect to MongoDB after all retries:", error);
+  process.exit(1);
 });
+
 const app = express();
 
 // Trust proxy for Vercel
