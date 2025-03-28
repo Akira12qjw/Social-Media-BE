@@ -3,10 +3,11 @@ import fs from "fs";
 import { Request } from "express";
 import { File } from "formidable";
 import {
+  UPLOAD_IMAGE_DIR,
   UPLOAD_IMAGE_TEMP_DIR,
   UPLOAD_VIDEO_DIR,
   UPLOAD_VIDEO_TEMP_DIR,
-} from "~/constants/dir";
+} from "../constants/dir";
 // const nanoid = require("nanoid/non-secure");
 export const initFolder = () => {
   [UPLOAD_IMAGE_TEMP_DIR, UPLOAD_VIDEO_TEMP_DIR].forEach((dir) => {

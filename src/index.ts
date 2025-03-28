@@ -1,5 +1,5 @@
 import express from "express";
-import { UPLOAD_VIDEO_DIR } from "~/constants/dir";
+import { UPLOAD_VIDEO_DIR } from "./constants/dir";
 import { defaultErrorHandler } from "~/middlewares/error.middlewares";
 import mediasRouter from "~/routes/medias.routes";
 import staticRouter from "~/routes/static.routes";

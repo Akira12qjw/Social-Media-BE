@@ -1,6 +1,6 @@
 import { Request } from "express";
 import sharp from "sharp";
-import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from "~/constants/dir";
+import { UPLOAD_IMAGE_DIR, UPLOAD_VIDEO_DIR } from "../constants/dir";
 import path from "path";
 import fsPromise from "fs/promises";
 import { envConfig, isProduction } from "~/constants/config";
