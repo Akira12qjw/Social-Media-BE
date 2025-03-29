@@ -130,7 +130,17 @@ app.use(
 );
 
 const corsOptions: CorsOptions = {
-  origin: isProduction ? envConfig.clientUrl : "*",
+  origin: isProduction
+    ? [
+        envConfig.clientUrl,
+        "https://social-media-be-lilac.vercel.app",
+        "https://social-media-be-psi.vercel.app",
+      ]
+    : "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 const port = envConfig.port;
