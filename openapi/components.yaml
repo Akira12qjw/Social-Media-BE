@@ -71,8 +71,209 @@ components:
           example: "http:localhost:4000/images/avatars/johndoe.jpg"
     UserVerifyStatus:
       type: number
-      enum: [Unverified, Verified, Banned]
+      enum: [0, 1, 2]
+      description: |
+        0: Unverified
+        1: Verified
+        2: Banned
       example: 1
+    Tweet:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        user_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        type:
+          type: number
+          enum: [0, 1, 2, 3]
+          description: |
+            0: Tweet
+            1: Retweet
+            2: Comment
+            3: QuoteTweet
+          example: 0
+        audience:
+          type: number
+          enum: [0, 1]
+          description: |
+            0: Everyone
+            1: Twitter Circle
+          example: 0
+        content:
+          type: string
+          example: "Hello, Twitter!"
+        parent_id:
+          type: string
+          format: MongoId
+          nullable: true
+          example: 64be0ad2e43d2464394feedb
+        hashtags:
+          type: array
+          items:
+            type: string
+            format: MongoId
+          example: ["64be0ad2e43d2464394feedb"]
+        mentions:
+          type: array
+          items:
+            type: string
+            format: MongoId
+          example: ["64be0ad2e43d2464394feedb"]
+        medias:
+          type: array
+          items:
+            $ref: "#/components/schemas/Media"
+        guest_views:
+          type: integer
+          example: 0
+        user_views:
+          type: integer
+          example: 0
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2023-03-08T12:00:00Z
+        updated_at:
+          type: string
+          format: ISO8601
+          example: 2023-03-08T12:00:00Z
+    TweetWithUser:
+      allOf:
+        - $ref: "#/components/schemas/Tweet"
+        - type: object
+          properties:
+            user:
+              $ref: "#/components/schemas/User"
+    TweetList:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            $ref: "#/components/schemas/TweetWithUser"
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        total_page:
+          type: integer
+          example: 10
+    Media:
+      type: object
+      properties:
+        url:
+          type: string
+          example: "http://localhost:4000/images/tweets/image.jpg"
+        type:
+          type: number
+          enum: [0, 1]
+          description: |
+            0: Image
+            1: Video
+          example: 0
+    MediaType:
+      type: number
+      enum: [0, 1]
+      description: |
+        0: Image
+        1: Video
+      example: 0
+    Bookmark:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        user_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        tweet_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2023-03-08T12:00:00Z
+    Like:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        user_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        tweet_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2023-03-08T12:00:00Z
+    Hashtag:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        name:
+          type: string
+          example: "twitter"
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2023-03-08T12:00:00Z
+    Follower:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        user_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        followed_user_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2023-03-08T12:00:00Z
+    RefreshToken:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2023-03-08T12:00:00Z
+        user_id:
+          type: string
+          format: MongoId
+          example: 64be0ad2e43d2464394feedb
   securitySchemes:
     BearerAuth:
       type: http
