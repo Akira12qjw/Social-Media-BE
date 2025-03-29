@@ -37,7 +37,7 @@ const options: swaggerJsdoc.Options = {
     servers: [
       {
         url: isProduction
-          ? "https://social-media-be-psi.vercel.app"
+          ? "https://social-media-be-lilac.vercel.app"
           : `http://localhost:${process.env.PORT || envConfig.port}`,
         description: isProduction ? "Production server" : "Development server",
       },
@@ -131,11 +131,7 @@ app.use(
 
 const corsOptions: CorsOptions = {
   origin: isProduction
-    ? [
-        envConfig.clientUrl,
-        "https://social-media-be-lilac.vercel.app",
-        "https://social-media-be-psi.vercel.app",
-      ]
+    ? [envConfig.clientUrl, "https://social-media-be-lilac.vercel.app"]
     : "*",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
