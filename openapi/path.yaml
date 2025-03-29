@@ -4,7 +4,10 @@ info:
   description: API documentation for Twitter Clone application
   version: 1.0.11
 servers:
-  - url: http://localhost:4000 || https://social-media-be-lilac.vercel.app/
+  - url: http://localhost:4000
+    description: Local development server
+  - url: https://social-media-be-psi.vercel.app
+    description: Production server
 tags:
   - name: users
     description: User management APIs
