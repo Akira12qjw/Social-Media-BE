@@ -121,7 +121,16 @@ app.use(
         scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
         styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
         imgSrc: ["'self'", "data:", "https:"],
-        connectSrc: ["'self'", "https:"],
+        connectSrc: [
+          "'self'",
+          "https:",
+          "http://localhost:3000",
+          "http://localhost:3001",
+          "ws://localhost:3000",
+          "ws://localhost:3001",
+          "ws://localhost:4000",
+          "http://localhost:4000",
+        ],
       },
     },
     crossOriginEmbedderPolicy: false,
@@ -132,13 +141,28 @@ app.use(
 const corsOptions: CorsOptions = {
   origin: isProduction
     ? [envConfig.clientUrl, "https://social-media-be-lilac.vercel.app"]
-    : "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+    : ["http://localhost:3000", "http://localhost:3001"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "x-nextjs-data",
+    "Origin",
+    "Accept",
+  ],
+  exposedHeaders: ["*", "Authorization"],
   credentials: true,
-  optionsSuccessStatus: 200,
+  optionsSuccessStatus: 204,
+  maxAge: 86400, // 24 hours
+  preflightContinue: false,
 };
+
+// Apply CORS middleware before any routes
 app.use(cors(corsOptions));
+
+// Enable pre-flight requests for all routes
+app.options("*", cors(corsOptions));
+
 const port = envConfig.port;
 
 // Tạo folder upload
@@ -194,5 +218,5 @@ app.get("/health", (req, res) => {
 initSocket(httpServer);
 
 httpServer.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`http://localhost:${port}`);
 });

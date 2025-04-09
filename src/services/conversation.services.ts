@@ -37,6 +37,59 @@ class ConversationService {
       total,
     };
   }
+
+  async getMessageUsers(user_id: string) {
+    const conversations = await databaseService.conversations
+      .aggregate([
+        {
+          $match: {
+            $or: [
+              { sender_id: new ObjectId(user_id) },
+              { receiver_id: new ObjectId(user_id) },
+            ],
+          },
+        },
+        {
+          $sort: { created_at: -1 },
+        },
+        {
+          $group: {
+            _id: {
+              $cond: [
+                { $eq: ["$sender_id", new ObjectId(user_id)] },
+                "$receiver_id",
+                "$sender_id",
+              ],
+            },
+            lastMessage: { $first: "$$ROOT" },
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "_id",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user",
+        },
+        {
+          $project: {
+            _id: "$user._id",
+            name: "$user.name",
+            username: "$user.username",
+            avatar: "$user.avatar",
+            last_message: "$lastMessage.content",
+            created_at: "$lastMessage.created_at",
+          },
+        },
+      ])
+      .toArray();
+
+    return conversations;
+  }
 }
 const conversationService = new ConversationService();
 export default conversationService;

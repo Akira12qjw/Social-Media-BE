@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { getConversationsController } from "../controllers/conversation.controllers";
+import {
+  getConversationsController,
+  getMessageUsersController,
+} from "../controllers/conversation.controllers";
 import { paginationValidator } from "../middlewares/tweets.middlewares";
 import {
   accessTokenValidator,
@@ -17,6 +20,13 @@ conversationsRouter.get(
   paginationValidator,
   getConversationsValidator,
   wrapRequestHandler(getConversationsController)
+);
+
+conversationsRouter.get(
+  "/users",
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(getMessageUsersController)
 );
 
 export default conversationsRouter;

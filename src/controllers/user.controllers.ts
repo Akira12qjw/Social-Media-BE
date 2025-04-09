@@ -241,6 +241,19 @@ export const unfollowController = async (
   return res.json(result);
 };
 
+export const getFollowingController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload;
+  const result = await usersService.getFollowing(user_id);
+  return res.json({
+    message: USERS_MESSAGES.GET_FOLLOWING_SUCCESS,
+    result,
+  });
+};
+
 export const changePasswordController = async (
   req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
   res: Response,

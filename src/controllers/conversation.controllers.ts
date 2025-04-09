@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { GetConversationsParams } from "../models/requests/Conversation.requests";
 import conversationService from "../services/conversation.services";
+import { TokenPayload } from "../models/requests/User.requests";
 
 export const getConversationsController = async (
   req: Request<GetConversationsParams>,
@@ -24,5 +25,18 @@ export const getConversationsController = async (
       conversations: result.conversations,
     },
     message: "Get conversations successfully",
+  });
+};
+
+export const getMessageUsersController = async (
+  req: Request,
+  res: Response
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload;
+  const result = await conversationService.getMessageUsers(user_id);
+
+  return res.json({
+    message: "Get message users successfully",
+    result,
   });
 };

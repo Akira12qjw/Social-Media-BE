@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { SearchQuery } from "../models/requests/Search.requests";
-import { Pagination } from "../models/requests/Tweet.requests";
 import searchService from "../services/search.services";
 
 export const searchController = async (
@@ -24,7 +23,7 @@ export const searchController = async (
       tweets: result.tweets,
       limit,
       page,
-      totalpage: Math.ceil(result.total / limit),
+      totalpage: Math.ceil(result.total / limit), // làm tròn lên
     },
   });
 };

@@ -67,6 +67,7 @@ export const USERS_MESSAGES = {
   REFRESH_TOKEN_SUCCESS: "Refresh token success",
   GET_VIDEO_STATUS_SUCCESS: "Get video status success",
   INVALID_FOLLOWED_USER_ID: "INVALID_FOLLOWED_USER_ID",
+  GET_FOLLOWING_SUCCESS: "Get following users list success",
 } as const;
 
 export const TWEETS_MESSAGES = {

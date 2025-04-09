@@ -30,6 +30,7 @@ import {
   unfollowController,
   updateMeController,
   verifyForgotPasswordController,
+  getFollowingController,
 } from "../controllers/user.controllers";
 import { wrapRequestHandler } from "../utils/handlers";
 import { fillterMiddleware } from "../middlewares/common.middlewares";
@@ -105,6 +106,12 @@ usersRouter.patch(
     "cover_photo",
   ]),
   wrapRequestHandler(updateMeController)
+);
+
+usersRouter.get(
+  "/following",
+  accessTokenValidator,
+  wrapRequestHandler(getFollowingController)
 );
 
 usersRouter.get("/:username", wrapRequestHandler(getProfileController));

@@ -9,13 +9,19 @@ import Conversation from "../models/schemas/Conversations.schema";
 import databaseService from "../services/database.services";
 import { Server as ServerHttp } from "http";
 import { ErrorWithStatus } from "../models/errors";
+import { isProduction, envConfig } from "../constants/config";
 
 const initSocket = (httpServer: ServerHttp) => {
   const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: isProduction
+        ? [envConfig.clientUrl, "https://social-media-be-lilac.vercel.app"]
+        : ["http://localhost:3000", "http://localhost:3001"],
+      credentials: true,
+      methods: ["GET", "POST"],
     },
   });
+
   const users: {
     [key: string]: {
       socket_id: string;

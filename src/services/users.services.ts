@@ -523,15 +523,11 @@ class UsersService {
       user_id: new ObjectId(user_id),
       followed_user_id: new ObjectId(followed_user_id),
     });
-    // Không tìm thấy document follower
-    // nghĩa là chưa follow người này
-    if (follower === null) {
+    if (!follower) {
       return {
         message: USERS_MESSAGES.ALREADY_UNFOLLOWED,
       };
     }
-    // Tìm thấy document follower
-    // Nghĩa là đã follow người này rồi, thì ta tiến hành xóa document này
     await databaseService.followers.deleteOne({
       user_id: new ObjectId(user_id),
       followed_user_id: new ObjectId(followed_user_id),
@@ -540,6 +536,32 @@ class UsersService {
       message: USERS_MESSAGES.UNFOLLOW_SUCCESS,
     };
   }
+
+  async getFollowing(user_id: string) {
+    const followers = await databaseService.followers
+      .find({
+        user_id: new ObjectId(user_id),
+      })
+      .toArray();
+
+    const followed_user_ids = followers.map(
+      (follower) => follower.followed_user_id
+    );
+    const users = await databaseService.users
+      .find({
+        _id: { $in: followed_user_ids },
+      })
+      .project({
+        password: 0,
+        email_verify_token: 0,
+        forgot_password_token: 0,
+        refresh_token: 0,
+      })
+      .toArray();
+
+    return users;
+  }
+
   async changePassword(user_id: string, new_password: string) {
     await databaseService.users.updateOne(
       { _id: new ObjectId(user_id) },

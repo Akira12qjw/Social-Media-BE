@@ -20,7 +20,7 @@ class DatabaseService {
     this.client = new MongoClient(uri, {
       serverApi: {
         version: ServerApiVersion.v1,
-        strict: true,
+        strict: false,
         deprecationErrors: true,
       },
       connectTimeoutMS: 10000, // 10 seconds
